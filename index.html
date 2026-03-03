@@ -3,46 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok Cafe Final</title>
+    <title>Stok Cafe Pro</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
-        .app-container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #2d3436; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f3f7; margin: 0; padding: 15px; }
+        .app-container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { text-align: center; color: #2d3436; margin-bottom: 20px; }
         
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; color: #636e72; }
         
         select, input { 
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
-            font-size: 16px; box-sizing: border-box;
+            width: 100%; padding: 12px; border: 1px solid #dfe6e9; border-radius: 10px; 
+            font-size: 16px; box-sizing: border-box; background: #fff;
         }
         
         .btn-hitung { 
             width: 100%; padding: 15px; background: #00b894; color: white; border: none; 
-            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
-
-        .btn-simpan {
-            width: 100%; padding: 10px; background: #0984e3; color: white; border: none;
-            border-radius: 8px; margin-top: 10px; font-weight: bold; cursor: pointer;
+            border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 5px;
         }
 
         #hasilSection { 
-            margin-top: 20px; padding: 15px; background: #fab1a0; border-radius: 10px; 
-            text-align: center; display: none;
+            margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 12px; 
+            text-align: center; display: none; border: 2px solid #ffcc80;
         }
 
-        .laporan-section { margin-top: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: left; }
-        th { background: #dfe6e9; }
-        .btn-hapus { background: #ff7675; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .btn-simpan {
+            width: 100%; padding: 12px; background: #0984e3; color: white; border: none;
+            border-radius: 10px; margin-top: 10px; font-weight: bold; cursor: pointer;
+        }
+
+        .laporan-section { margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee; }
+        .btn-copy {
+            width: 100%; padding: 12px; background: #6c5ce7; color: white; border: none;
+            border-radius: 10px; margin-bottom: 15px; font-weight: bold; cursor: pointer;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; background: #fff; }
+        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; color: #2d3436; }
+        .btn-hapus { background: #ff7675; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>☕ Stok Opname</h2>
+    <h2>☕ Kalkulator Stok</h2>
 
     <div class="form-group">
         <label>Nama Barang:</label>
@@ -93,19 +98,20 @@
 
     <div class="form-group">
         <label>Berat Timbangan (gram):</label>
-        <input type="number" id="beratInput" placeholder="Masukkan total berat..." inputmode="decimal">
+        <input type="number" id="beratInput" placeholder="Contoh: 1250" inputmode="decimal">
     </div>
 
     <button class="btn-hitung" onclick="kalkulasi()">HITUNG STOK</button>
 
     <div id="hasilSection">
-        <div style="font-weight: bold;">Hasil Stok Riil:</div>
-        <div style="font-size: 28px; font-weight: 800;" id="nilaiHasil">0g</div>
-        <button class="btn-simpan" onclick="simpanData()">SIMPAN KE LAPORAN</button>
+        <div style="color: #d35400; font-weight: bold;">Hasil Stok Riil:</div>
+        <div style="font-size: 32px; font-weight: 800; color: #e67e22;" id="nilaiHasil">0g</div>
+        <button class="btn-simpan" onclick="simpanData()">➕ Tambahkan ke Laporan</button>
     </div>
 
     <div class="laporan-section">
-        <h3>📋 Laporan Stok Final</h3>
+        <h3>📋 Laporan Stok Hari Ini</h3>
+        <button class="btn-copy" onclick="copyLaporan()">📋 Salin Semua ke WhatsApp</button>
         <table id="tabelLaporan">
             <thead>
                 <tr>
@@ -114,8 +120,7 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                </tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>
@@ -123,6 +128,7 @@
 <script>
     let produkTerpilih = "";
     let hasilTerakhir = 0;
+    let dataLaporan = [];
 
     function kalkulasi() {
         const select = document.getElementById('produk');
@@ -131,30 +137,60 @@
         const total = parseFloat(document.getElementById('beratInput').value);
 
         if (isNaN(total)) {
-            alert("Masukkan angka berat dulu!");
+            alert("Harap masukkan angka berat timbangan!");
             return;
         }
 
         hasilTerakhir = total - wadah;
         if (hasilTerakhir < 0) hasilTerakhir = 0;
 
-        document.getElementById('nilaiHasil').innerText = hasilTerakhir + " gram";
+        document.getElementById('nilaiHasil').innerText = hasilTerakhir + " g";
         document.getElementById('hasilSection').style.display = 'block';
     }
 
     function simpanData() {
         const tbody = document.querySelector('#tabelLaporan tbody');
-        const row = tbody.insertRow();
+        dataLaporan.push({ nama: produkTerpilih, stok: hasilTerakhir });
         
-        row.innerHTML = `
-            <td>${produkTerpilih}</td>
-            <td>${hasilTerakhir} g</td>
-            <td><button class="btn-hapus" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>
-        `;
+        renderTabel();
         
-        // Reset input setelah simpan
         document.getElementById('beratInput').value = "";
         document.getElementById('hasilSection').style.display = 'none';
+    }
+
+    function renderTabel() {
+        const tbody = document.querySelector('#tabelLaporan tbody');
+        tbody.innerHTML = "";
+        dataLaporan.forEach((item, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${item.nama}</td>
+                <td><b>${item.stok} g</b></td>
+                <td><button class="btn-hapus" onclick="hapusData(${index})">X</button></td>
+            `;
+        });
+    }
+
+    function hapusData(index) {
+        dataLaporan.splice(index, 1);
+        renderTabel();
+    }
+
+    function copyLaporan() {
+        if (dataLaporan.length === 0) {
+            alert("Laporan masih kosong!");
+            return;
+        }
+
+        let teks = "*REKAP STOK CAFE*\nTanggal: " + new Date().toLocaleDateString('id-ID') + "\n--------------------------\n";
+        dataLaporan.forEach(item => {
+            teks += `• ${item.nama}: ${item.stok} g\n`;
+        });
+        teks += "--------------------------\n_Laporan dari App Stok Cafe_";
+
+        navigator.clipboard.writeText(teks).then(() => {
+            alert("Laporan berhasil disalin! Silakan paste di WhatsApp.");
+        });
     }
 </script>
 
