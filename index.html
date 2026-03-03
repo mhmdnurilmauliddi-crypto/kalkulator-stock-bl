@@ -3,120 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok Opname Cafe</title>
+    <title>Stok Cafe Final</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 15px; }
-        .app-container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h2 { text-align: center; color: #2d3436; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
+        .app-container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #2d3436; }
         
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #636e72; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #636e72; }
         
         select, input { 
-            width: 100%; padding: 14px; border: 1.5px solid #dfe6e9; border-radius: 12px; 
-            font-size: 16px; box-sizing: border-box; transition: 0.3s;
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
+            font-size: 16px; box-sizing: border-box;
         }
-        select:focus, input:focus { border-color: #0984e3; outline: none; }
         
         .btn-hitung { 
-            width: 100%; padding: 16px; background: #0984e3; color: white; border: none; 
-            border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px;
+            width: 100%; padding: 15px; background: #00b894; color: white; border: none; 
+            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
         }
-        .btn-hitung:active { transform: scale(0.98); }
+
+        .btn-simpan {
+            width: 100%; padding: 10px; background: #0984e3; color: white; border: none;
+            border-radius: 8px; margin-top: 10px; font-weight: bold; cursor: pointer;
+        }
 
         #hasilSection { 
-            margin-top: 25px; padding: 20px; background: #e3f2fd; border-radius: 15px; 
-            text-align: center; display: none; border: 2px dashed #0984e3;
+            margin-top: 20px; padding: 15px; background: #fab1a0; border-radius: 10px; 
+            text-align: center; display: none;
         }
-        .text-hasil { font-size: 32px; font-weight: 800; color: #0984e3; margin: 10px 0; }
-        .info-wadah { font-size: 13px; color: #b2bec3; }
+
+        .laporan-section { margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: left; }
+        th { background: #dfe6e9; }
+        .btn-hapus { background: #ff7675; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>📊 Stock Calculator</h2>
+    <h2>☕ Stok Opname</h2>
 
     <div class="form-group">
-        <label>Pilih Barang:</label>
+        <label>Nama Barang:</label>
         <select id="produk">
-            <optgroup label="Powder (Potongan 169g)">
-                <option value="169">Powder Red Velvet</option>
-                <option value="169">Powder Matcha</option>
-                <option value="169">Powder Taro</option>
-                <option value="169">Powder Coklat</option>
-            </optgroup>
-            <optgroup label="Sirup (Potongan 60g)">
-                <option value="60">Sirup Peach/Leci/Hazelnut</option>
-                <option value="60">Sirup Strawberry/Butterscotch/Vanilla</option>
-            </optgroup>
-            <optgroup label="Sirup Marjan">
-                <option value="300">Marjan Mangga/Cocopandan (300g)</option>
-                <option value="340">Marjan Lemon (340g)</option>
-                <option value="133">Salted Caramel (133g)</option>
-            </optgroup>
-            <optgroup label="Kopi & Teh">
-                <option value="161">Kopi Robusta (161g)</option>
-                <option value="41">Teh Telang (41g)</option>
-                <option value="175">Teh Racik (175g)</option>
-            </optgroup>
-            <optgroup label="Susu & Gula">
-                <option value="124">Gula Pasir (124g)</option>
-                <option value="40">Susu UHT (40g)</option>
-                <option value="123">Susu Racik (123g)</option>
-                <option value="50">Susu SKM (50g)</option>
-            </optgroup>
-            <optgroup label="Minuman Soda">
-                <option value="11">Soda (Fanta/Sprite/Cola) 250ml (11g)</option>
-                <option value="23">Soda (Fanta/Sprite/Cola) 390ml (23g)</option>
-                <option value="38">Soda (Fanta/Sprite/Cola) 1 Liter (38g)</option>
-            </optgroup>
-            <optgroup label="Tanpa Potongan (0g)">
-                <option value="0">Buah Leci / Lemon / Creamer</option>
-                <option value="0">Redclay / Espresso / Simple Sirup</option>
-                <option value="0">Palm Sugar / Teh Bandulan / Teh Villa</option>
-                <option value="0">Marshmallow / Uwuh / Yakult</option>
-                <option value="0">Cup / Indomie / Telur / Santan</option>
-                <option value="0">Lainnya (Hydro Coco, Salt, Richgold, dll)</option>
-            </optgroup>
+            <option value="0">Air Mineral Vit/Aquviva (0g)</option>
+            <option value="0">Buah Leci (0g)</option>
+            <option value="0">Buah Lemon (0g)</option>
+            <option value="0">Creamer (0g)</option>
+            <option value="0">Cup Oval/Datar (0g)</option>
+            <option value="0">Espresso (0g)</option>
+            <option value="11">Fanta/Sprite/Cola 250ml (11g)</option>
+            <option value="23">Fanta/Sprite/Cola 390ml (23g)</option>
+            <option value="38">Fanta/Sprite/Cola 1 Liter (38g)</option>
+            <option value="124">Gula Pasir (124g)</option>
+            <option value="0">Half n Half (0g)</option>
+            <option value="0">Hydro Coco (0g)</option>
+            <option value="0">Indomie Goreng/Kuah/Aceh (0g)</option>
+            <option value="161">Kopi Robusta (161g)</option>
+            <option value="300">Marjan Mangga/Cocopandan (300g)</option>
+            <option value="340">Marjan Lemon (340g)</option>
+            <option value="0">Marshmallow (0g)</option>
+            <option value="0">Nescafe (0g)</option>
+            <option value="0">Palm Sugar (0g)</option>
+            <option value="169">Powder Coklat (169g)</option>
+            <option value="169">Powder Matcha (169g)</option>
+            <option value="169">Powder Red Velvet (169g)</option>
+            <option value="169">Powder Taro (169g)</option>
+            <option value="0">Redclay (0g)</option>
+            <option value="0">Regal (0g)</option>
+            <option value="0">Richgold (0g)</option>
+            <option value="0">Salt (0g)</option>
+            <option value="133">Salted Caramel (133g)</option>
+            <option value="0">Santan (0g)</option>
+            <option value="0">Simple Sirup (0g)</option>
+            <option value="60">Sirup Peach/Leci/Hazelnut/Strw/Butter/Van (60g)</option>
+            <option value="50">SKM (50g)</option>
+            <option value="40">Susu UHT (40g)</option>
+            <option value="123">Susu Racik (123g)</option>
+            <option value="0">Teh Bandulan (0g)</option>
+            <option value="175">Teh Racik (175g)</option>
+            <option value="41">Teh Telang (41g)</option>
+            <option value="0">Teh Villa (0g)</option>
+            <option value="0">Telur (0g)</option>
+            <option value="0">Uwuh (0g)</option>
+            <option value="0">Yakult Original/Mangga (0g)</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>Berat Total Timbangan (gram):</label>
-        <input type="number" id="beratInput" placeholder="Masukkan angka..." inputmode="decimal">
+        <label>Berat Timbangan (gram):</label>
+        <input type="number" id="beratInput" placeholder="Masukkan total berat..." inputmode="decimal">
     </div>
 
-    <button class="btn-hitung" onclick="kalkulasi()">HITUNG SEKARANG</button>
+    <button class="btn-hitung" onclick="kalkulasi()">HITUNG STOK</button>
 
     <div id="hasilSection">
-        <div style="color: #636e72;">Stok Riil (Netto):</div>
-        <div class="text-hasil" id="nilaiHasil">0</div>
-        <div class="info-wadah" id="infoWadah">Berat Wadah: 0g</div>
+        <div style="font-weight: bold;">Hasil Stok Riil:</div>
+        <div style="font-size: 28px; font-weight: 800;" id="nilaiHasil">0g</div>
+        <button class="btn-simpan" onclick="simpanData()">SIMPAN KE LAPORAN</button>
+    </div>
+
+    <div class="laporan-section">
+        <h3>📋 Laporan Stok Final</h3>
+        <table id="tabelLaporan">
+            <thead>
+                <tr>
+                    <th>Barang</th>
+                    <th>Stok Riil</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
     </div>
 </div>
 
 <script>
+    let produkTerpilih = "";
+    let hasilTerakhir = 0;
+
     function kalkulasi() {
-        const wadah = parseFloat(document.getElementById('produk').value);
+        const select = document.getElementById('produk');
+        produkTerpilih = select.options[select.selectedIndex].text.split(' (')[0];
+        const wadah = parseFloat(select.value);
         const total = parseFloat(document.getElementById('beratInput').value);
-        const section = document.getElementById('hasilSection');
 
         if (isNaN(total)) {
-            alert("Tolong masukkan berat dari timbangan ya!");
+            alert("Masukkan angka berat dulu!");
             return;
         }
 
-        let netto = total - wadah;
-        if (netto < 0) netto = 0;
+        hasilTerakhir = total - wadah;
+        if (hasilTerakhir < 0) hasilTerakhir = 0;
 
-        document.getElementById('nilaiHasil').innerText = netto.toLocaleString('id-ID') + " gram";
-        document.getElementById('infoWadah').innerText = "Sudah dikurangi berat wadah: " + wadah + "g";
+        document.getElementById('nilaiHasil').innerText = hasilTerakhir + " gram";
+        document.getElementById('hasilSection').style.display = 'block';
+    }
+
+    function simpanData() {
+        const tbody = document.querySelector('#tabelLaporan tbody');
+        const row = tbody.insertRow();
         
-        section.style.display = 'block';
+        row.innerHTML = `
+            <td>${produkTerpilih}</td>
+            <td>${hasilTerakhir} g</td>
+            <td><button class="btn-hapus" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>
+        `;
         
-        // Auto-scroll ke hasil (nyaman untuk layar HP kecil)
-        section.scrollIntoView({ behavior: 'smooth' });
+        // Reset input setelah simpan
+        document.getElementById('beratInput').value = "";
+        document.getElementById('hasilSection').style.display = 'none';
     }
 </script>
 
