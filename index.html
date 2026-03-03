@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok Cafe PRO v2</title>
+    <title>Stok Cafe Fast v3</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
         .app-container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
@@ -12,23 +12,29 @@
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #485460; }
         select, input { width: 100%; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
         select:focus, input:focus { border-color: #05c46b; }
-        .btn-hitung { width: 100%; padding: 16px; background: #05c46b; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        #hasilSection { margin-top: 25px; padding: 20px; background: #dff9fb; border-radius: 15px; text-align: center; display: none; border: 2px solid #c7ecee; }
-        .btn-simpan { width: 100%; padding: 12px; background: #0fbcf9; color: white; border: none; border-radius: 10px; margin-top: 15px; font-weight: bold; cursor: pointer; }
-        .laporan-section { margin-top: 40px; border-top: 2px solid #eee; padding-top: 20px; }
+        
+        /* Tombol Hitung & Masuk Laporan */
+        .btn-utama { width: 100%; padding: 18px; background: #05c46b; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-utama:active { background: #04a55a; transform: scale(0.98); }
+
+        .laporan-section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
         th, td { border: 1px solid #dcdde1; padding: 12px; text-align: left; font-size: 13px; }
         th { background: #f1f2f6; color: #2f3640; }
+        
         .action-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn-download { flex: 2; background: #3c40c6; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .btn-reset { flex: 1; background: #ff3f34; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .btn-hapus { background: #ff5e57; color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; }
+
+        /* Animasi notifikasi kecil saat data masuk */
+        #notif { display: none; text-align: center; color: #05c46b; font-weight: bold; margin-top: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>☕ Cafe Inventory System v2</h2>
+    <h2>☕ Cafe Stok (Auto-Save)</h2>
 
     <div class="form-group">
         <label>Nama Barang:</label>
@@ -42,156 +48,3 @@
             <option value="23">Coca Cola 390ml (23g)</option>
             <option value="38">Coca Cola 1 Liter (38g)</option>
             <option value="0">Creamer (0g)</option>
-            <option value="0">Cup Datar 16 oz (0g)</option>
-            <option value="0">Cup Oval 14 oz (0g)</option>
-            <option value="0">Cup Oval 16 oz (0g)</option>
-            <option value="60">Denali Sirup Butterscotch (60g)</option>
-            <option value="60">Denali Sirup Hazelnut (60g)</option>
-            <option value="60">Denali Sirup Leci (60g)</option>
-            <option value="60">Denali Sirup Peach (60g)</option>
-            <option value="60">Denali Sirup Strawberry (60g)</option>
-            <option value="60">Denali Sirup Vanilla (60g)</option>
-            <option value="0">Espresso (0g)</option>
-            <option value="11">Fanta 250ml (11g)</option>
-            <option value="23">Fanta 390ml (23g)</option>
-            <option value="38">Fanta 1 Liter (38g)</option>
-            <option value="124">Gula Pasir (124g)</option>
-            <option value="0">Half n Half (0g)</option>
-            <option value="0">Hydro Coco (0g)</option>
-            <option value="0">Indomie Aceh (0g)</option>
-            <option value="0">Indomie Goreng (0g)</option>
-            <option value="0">Indomie Kuah (0g)</option>
-            <option value="161">Kopi Robusta (161g)</option>
-            <option value="300">Marjan Cocopandan (300g)</option>
-            <option value="340">Marjan Lemon (340g)</option>
-            <option value="300">Marjan Mangga (300g)</option>
-            <option value="0">Marshmallow (0g)</option>
-            <option value="0">Nescafe (0g)</option>
-            <option value="0">Palm Sugar (0g)</option>
-            <option value="169">Powder Coklat (169g)</option>
-            <option value="169">Powder Matcha (169g)</option>
-            <option value="169">Powder Red Velvet (169g)</option>
-            <option value="169">Powder Taro (169g)</option>
-            <option value="0">Redclay (0g)</option>
-            <option value="0">Regal (0g)</option>
-            <option value="0">Richgold (0g)</option>
-            <option value="0">Salt (0g)</option>
-            <option value="133">Salted Caramel (133g)</option>
-            <option value="0">Santan (0g)</option>
-            <option value="0">Simple Sirup (0g)</option>
-            <option value="50">SKM (50g)</option>
-            <option value="11">Sprite 250ml (11g)</option>
-            <option value="23">Sprite 390ml (23g)</option>
-            <option value="38">Sprite 1 Liter (38g)</option>
-            <option value="40">Susu UHT (40g)</option>
-            <option value="123">Susu Racik (123g)</option>
-            <option value="0">Teh Bandulan (0g)</option>
-            <option value="175">Teh Racik (175g)</option>
-            <option value="41">Teh Telang (41g)</option>
-            <option value="0">Teh Villa (0g)</option>
-            <option value="0">Telur (0g)</option>
-            <option value="0">Uwuh (0g)</option>
-            <option value="0">Yakult Mangga (0g)</option>
-            <option value="0">Yakult Original (0g)</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Berat Timbangan (gram):</label>
-        <input type="number" id="beratInput" placeholder="Masukkan total berat..." inputmode="decimal">
-    </div>
-
-    <button class="btn-hitung" onclick="kalkulasi()">HITUNG STOK</button>
-
-    <div id="hasilSection">
-        <div style="font-weight: bold; color: #2f3640;">STOK BERSIH:</div>
-        <div style="font-size: 32px; font-weight: 800; color: #05c46b;" id="nilaiHasil">0g</div>
-        <button class="btn-simpan" onclick="simpanData()">MASUKKAN KE LAPORAN</button>
-    </div>
-
-    <div class="laporan-section">
-        <h3>📋 Laporan Detail Final</h3>
-        <table id="tabelLaporan">
-            <thead>
-                <tr>
-                    <th>Nama Barang</th>
-                    <th>Stok (g)</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <div class="action-btns">
-            <button class="btn-download" onclick="downloadCSV()">⬇️ DOWNLOAD CSV / EXCEL</button>
-            <button class="btn-reset" onclick="resetLaporan()">❌ RESET</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    let produkTerpilih = "";
-    let hasilTerakhir = 0;
-
-    function kalkulasi() {
-        const select = document.getElementById('produk');
-        if(select.value === "0" && select.selectedIndex === 0) {
-            alert("Pilih barang dulu!"); return;
-        }
-        
-        produkTerpilih = select.options[select.selectedIndex].text.split(' (')[0];
-        const wadah = parseFloat(select.value);
-        const total = parseFloat(document.getElementById('beratInput').value);
-
-        if (isNaN(total)) {
-            alert("Masukkan angka berat timbangan!"); return;
-        }
-
-        hasilTerakhir = total - wadah;
-        if (hasilTerakhir < 0) hasilTerakhir = 0;
-
-        document.getElementById('nilaiHasil').innerText = hasilTerakhir + " g";
-        document.getElementById('hasilSection').style.display = 'block';
-    }
-
-    function simpanData() {
-        const tbody = document.querySelector('#tabelLaporan tbody');
-        const row = tbody.insertRow();
-        row.innerHTML = `<td>${produkTerpilih}</td><td>${hasilTerakhir}</td><td><button class="btn-hapus" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>`;
-        
-        document.getElementById('beratInput').value = "";
-        document.getElementById('hasilSection').style.display = 'none';
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    function downloadCSV() {
-        let csv = 'Nama Barang,Stok Riil (gram)\n';
-        const rows = document.querySelectorAll('#tabelLaporan tbody tr');
-        
-        if(rows.length === 0) { alert("Belum ada data untuk diunduh!"); return; }
-
-        rows.forEach(row => {
-            const cols = row.querySelectorAll('td');
-            csv += `${cols[0].innerText},${cols[1].innerText}\n`;
-        });
-
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('hidden', '');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'laporan_stok_cafe_lengkap.csv');
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
-
-    function resetLaporan() {
-        if(confirm("Hapus semua rekapan?")) {
-            document.querySelector('#tabelLaporan tbody').innerHTML = "";
-        }
-    }
-</script>
-
-</body>
-</html>
