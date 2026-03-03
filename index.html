@@ -48,3 +48,145 @@
             <option value="23">Coca Cola 390ml (23g)</option>
             <option value="38">Coca Cola 1 Liter (38g)</option>
             <option value="0">Creamer (0g)</option>
+            <option value="0">Cup Datar 16 oz (0g)</option>
+            <option value="0">Cup Oval 14 oz (0g)</option>
+            <option value="0">Cup Oval 16 oz (0g)</option>
+            <option value="60">Denali Sirup Butterscotch (60g)</option>
+            <option value="60">Denali Sirup Hazelnut (60g)</option>
+            <option value="60">Denali Sirup Leci (60g)</option>
+            <option value="60">Denali Sirup Peach (60g)</option>
+            <option value="60">Denali Sirup Strawberry (60g)</option>
+            <option value="60">Denali Sirup Vanilla (60g)</option>
+            <option value="0">Espresso (0g)</option>
+            <option value="11">Fanta 250ml (11g)</option>
+            <option value="23">Fanta 390ml (23g)</option>
+            <option value="38">Fanta 1 Liter (38g)</option>
+            <option value="124">Gula Pasir (124g)</option>
+            <option value="0">Half n Half (0g)</option>
+            <option value="0">Hydro Coco (0g)</option>
+            <option value="0">Indomie Aceh (0g)</option>
+            <option value="0">Indomie Goreng (0g)</option>
+            <option value="0">Indomie Kuah (0g)</option>
+            <option value="161">Kopi Robusta (161g)</option>
+            <option value="300">Marjan Cocopandan (300g)</option>
+            <option value="340">Marjan Lemon (340g)</option>
+            <option value="300">Marjan Mangga (300g)</option>
+            <option value="0">Marshmallow (0g)</option>
+            <option value="0">Nescafe (0g)</option>
+            <option value="0">Palm Sugar (0g)</option>
+            <option value="169">Powder Coklat (169g)</option>
+            <option value="169">Powder Matcha (169g)</option>
+            <option value="169">Powder Red Velvet (169g)</option>
+            <option value="169">Powder Taro (169g)</option>
+            <option value="0">Redclay (0g)</option>
+            <option value="0">Regal (0g)</option>
+            <option value="0">Richgold (0g)</option>
+            <option value="0">Salt (0g)</option>
+            <option value="133">Salted Caramel (133g)</option>
+            <option value="0">Santan (0g)</option>
+            <option value="0">Simple Sirup (0g)</option>
+            <option value="50">SKM (50g)</option>
+            <option value="11">Sprite 250ml (11g)</option>
+            <option value="23">Sprite 390ml (23g)</option>
+            <option value="38">Sprite 1 Liter (38g)</option>
+            <option value="40">Susu UHT (40g)</option>
+            <option value="123">Susu Racik (123g)</option>
+            <option value="0">Teh Bandulan (0g)</option>
+            <option value="175">Teh Racik (175g)</option>
+            <option value="41">Teh Telang (41g)</option>
+            <option value="0">Teh Villa (0g)</option>
+            <option value="0">Telur (0g)</option>
+            <option value="0">Uwuh (0g)</option>
+            <option value="0">Yakult Mangga (0g)</option>
+            <option value="0">Yakult Original (0g)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Berat Timbangan (gram):</label>
+        <input type="number" id="beratInput" placeholder="Masukkan angka..." inputmode="decimal">
+    </div>
+
+    <button class="btn-utama" onclick="prosesData()">HITUNG & SIMPAN</button>
+    <div id="notif">✓ Tersimpan ke laporan!</div>
+
+    <div class="laporan-section">
+        <h3>📋 Hasil Rekapan Stok</h3>
+        <table id="tabelLaporan">
+            <thead>
+                <tr>
+                    <th>Nama Barang</th>
+                    <th>Stok Riil (g)</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="action-btns">
+            <button class="btn-download" onclick="downloadCSV()">⬇️ DOWNLOAD CSV</button>
+            <button class="btn-reset" onclick="resetLaporan()">❌ RESET</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function prosesData() {
+        const select = document.getElementById('produk');
+        const beratInput = document.getElementById('beratInput');
+        const notif = document.getElementById('notif');
+        
+        // 1. Validasi
+        if(select.value === "0" && select.selectedIndex === 0) {
+            alert("Pilih barang dulu!"); return;
+        }
+        if (isNaN(parseFloat(beratInput.value))) {
+            alert("Masukkan angka berat!"); return;
+        }
+
+        // 2. Kalkulasi
+        const namaProduk = select.options[select.selectedIndex].text.split(' (')[0];
+        const wadah = parseFloat(select.value);
+        const total = parseFloat(beratInput.value);
+        let hasil = total - wadah;
+        if (hasil < 0) hasil = 0;
+
+        // 3. Masukkan ke Tabel secara otomatis
+        const tbody = document.querySelector('#tabelLaporan tbody');
+        const row = tbody.insertRow(0); // Tambah di baris paling atas
+        row.innerHTML = `<td>${namaProduk}</td><td><b>${hasil}</b></td><td><button class="btn-hapus" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>`;
+        
+        // 4. Reset input & tampilkan feedback
+        beratInput.value = "";
+        notif.style.display = "block";
+        setTimeout(() => { notif.style.display = "none"; }, 1500);
+        
+        // Focus kembali ke pilih barang (Opsional)
+        select.focus();
+    }
+
+    function downloadCSV() {
+        let csv = 'Nama Barang,Stok Riil (gram)\n';
+        const rows = document.querySelectorAll('#tabelLaporan tbody tr');
+        if(rows.length === 0) { alert("Data kosong!"); return; }
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('td');
+            csv += `${cols[0].innerText},${cols[1].innerText}\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'stok_cafe_hari_ini.csv';
+        a.click();
+    }
+
+    function resetLaporan() {
+        if(confirm("Hapus semua rekapan?")) {
+            document.querySelector('#tabelLaporan tbody').innerHTML = "";
+        }
+    }
+</script>
+
+</body>
+</html>
