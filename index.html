@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Stok BL - Pecahan</title>
+    <title>Stok Cafe v4 - Multi Satuan</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
         .app-container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #1e272e; margin-bottom: 25px; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #485460; }
-        select, input { width: 100%; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; }
         
-        /* Tombol Simbol Pecahan */
+        /* Layout Input & Satuan */
+        .input-row { display: flex; gap: 10px; }
+        .input-row input { flex: 2; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; outline: none; }
+        .input-row select { flex: 1; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; background: #f8f9fa; }
+        
+        select#produk { width: 100%; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; margin-bottom: 10px; }
+        
         .fraction-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-frac { flex: 1; padding: 10px; background: #dfe6e9; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-frac:hover { background: #b2bec3; }
+        .btn-frac { flex: 1; padding: 10px; background: #dfe6e9; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        .btn-utama { width: 100%; padding: 18px; background: #05c46b; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-utama { width: 100%; padding: 18px; background: #05c46b; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         
         .laporan-section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #dcdde1; padding: 12px; text-align: left; font-size: 13px; }
         th { background: #f1f2f6; }
+        
         .action-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn-download { flex: 2; background: #3c40c6; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .btn-reset { flex: 1; background: #ff3f34; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
@@ -32,10 +37,10 @@
 <body>
 
 <div class="app-container">
-    <h2>☕ Kalkulator Stok </h2>
+    <h2>☕ Cafe Inventory v4</h2>
 
     <div class="form-group">
-        <label>Nama Barang:</label>
+        <label>Pilih Nama Barang:</label>
         <select id="produk">
             <option value="0">-- Pilih Barang --</option>
             <option value="0">Air Mineral Aquviva (0g)</option>
@@ -101,17 +106,25 @@
     </div>
 
     <div class="form-group">
-        <label>Berat Timbangan (gram):</label>
-        <input type="number" id="beratInput" placeholder="Masukkan angka..." step="0.01">
+        <label>Masukkan Jumlah & Satuan:</label>
+        <div class="input-row">
+            <input type="number" id="beratInput" placeholder="Angka..." step="0.01">
+            <select id="satuan">
+                <option value="gr">gram</option>
+                <option value="ml">ml</option>
+                <option value="pcs">pcs</option>
+                <option value="btl">botol</option>
+            </select>
+        </div>
         
         <div class="fraction-btns">
-            <button class="btn-frac" onclick="setFrac(0.25)">¼ (0.25)</button>
-            <button class="btn-frac" onclick="setFrac(0.5)">½ (0.5)</button>
-            <button class="btn-frac" onclick="setFrac(0.75)">¾ (0.75)</button>
+            <button class="btn-frac" onclick="setFrac(0.25)">¼</button>
+            <button class="btn-frac" onclick="setFrac(0.5)">½</button>
+            <button class="btn-frac" onclick="setFrac(0.75)">¾</button>
         </div>
     </div>
 
-    <button class="btn-utama" onclick="prosesData()">HITUNG & SIMPAN</button>
+    <button class="btn-utama" onclick="prosesData()">HITUNG & SIMPAN KE LAPORAN</button>
     <div id="notif">✓ Tersimpan!</div>
 
     <div class="laporan-section">
@@ -119,7 +132,7 @@
             <thead>
                 <tr>
                     <th>Barang</th>
-                    <th>Stok (g)</th>
+                    <th>Stok Akhir</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -133,27 +146,34 @@
 </div>
 
 <script>
-    // Fungsi untuk mengisi pecahan otomatis
-    function setFrac(val) {
-        document.getElementById('beratInput').value = val;
-    }
+    function setFrac(val) { document.getElementById('beratInput').value = val; }
 
     function prosesData() {
-        const select = document.getElementById('produk');
+        const selectProduk = document.getElementById('produk');
         const beratInput = document.getElementById('beratInput');
+        const satuan = document.getElementById('satuan').value;
         
-        if(select.value === "0" && select.selectedIndex === 0) { alert("Pilih barang!"); return; }
-        if (beratInput.value === "") { alert("Isi berat atau pilih pecahan!"); return; }
+        if(selectProduk.value === "0") { alert("Pilih barang!"); return; }
+        if (beratInput.value === "") { alert("Isi jumlah!"); return; }
 
-        const namaProduk = select.options[select.selectedIndex].text.split(' (')[0];
-        const wadah = parseFloat(select.value);
+        const namaProduk = selectProduk.options[selectProduk.selectedIndex].text.split(' (')[0];
+        const wadah = parseFloat(selectProduk.value);
         const total = parseFloat(beratInput.value);
-        let hasil = total - wadah;
+        
+        // Logika: Hanya kurangi wadah jika satuan adalah 'gr' atau 'ml'
+        let hasil = total;
+        if (satuan === "gr" || satuan === "ml") {
+            hasil = total - wadah;
+        }
         if (hasil < 0) hasil = 0;
 
         const tbody = document.querySelector('#tabelLaporan tbody');
         const row = tbody.insertRow(0);
-        row.innerHTML = `<td>${namaProduk}</td><td><b>${hasil.toFixed(2)}</b></td><td><button style="background:#ff5e57;color:white;border:none;padding:5px;border-radius:5px;" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>`;
+        row.innerHTML = `
+            <td>${namaProduk}</td>
+            <td><b>${hasil % 1 !== 0 ? hasil.toFixed(2) : hasil} ${satuan}</b></td>
+            <td><button style="background:#ff5e57;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>
+        `;
         
         beratInput.value = "";
         const notif = document.getElementById('notif');
@@ -162,7 +182,7 @@
     }
 
     function downloadCSV() {
-        let csv = 'Nama Barang,Stok Riil (gram)\n';
+        let csv = 'Nama Barang,Stok Akhir\n';
         const rows = document.querySelectorAll('#tabelLaporan tbody tr');
         rows.forEach(row => {
             const cols = row.querySelectorAll('td');
@@ -172,12 +192,12 @@
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'stok_cafe.csv';
+        a.download = 'rekapan_stok_cafe.csv';
         a.click();
     }
 
     function resetLaporan() {
-        if(confirm("Reset semua?")) document.querySelector('#tabelLaporan tbody').innerHTML = "";
+        if(confirm("Reset semua rekapan?")) document.querySelector('#tabelLaporan tbody').innerHTML = "";
     }
 </script>
 
