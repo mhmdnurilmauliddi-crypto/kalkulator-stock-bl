@@ -3,38 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok Cafe Fast v3</title>
+    <title>Kalkulator Stok BL - Pecahan</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
         .app-container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #1e272e; margin-bottom: 25px; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #485460; }
-        select, input { width: 100%; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        select:focus, input:focus { border-color: #05c46b; }
+        select, input { width: 100%; padding: 14px; border: 2px solid #edeff2; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; }
         
-        /* Tombol Hitung & Masuk Laporan */
-        .btn-utama { width: 100%; padding: 18px; background: #05c46b; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-utama:active { background: #04a55a; transform: scale(0.98); }
+        /* Tombol Simbol Pecahan */
+        .fraction-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-frac { flex: 1; padding: 10px; background: #dfe6e9; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-frac:hover { background: #b2bec3; }
 
+        .btn-utama { width: 100%; padding: 18px; background: #05c46b; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
         .laporan-section { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
         th, td { border: 1px solid #dcdde1; padding: 12px; text-align: left; font-size: 13px; }
-        th { background: #f1f2f6; color: #2f3640; }
-        
+        th { background: #f1f2f6; }
         .action-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn-download { flex: 2; background: #3c40c6; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .btn-reset { flex: 1; background: #ff3f34; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .btn-hapus { background: #ff5e57; color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; }
-
-        /* Animasi notifikasi kecil saat data masuk */
-        #notif { display: none; text-align: center; color: #05c46b; font-weight: bold; margin-top: 10px; font-size: 14px; }
+        #notif { display: none; text-align: center; color: #05c46b; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>☕ Kalkulator Stock (Auto-Save)</h2>
+    <h2>☕ Kalkulator Stok </h2>
 
     <div class="form-group">
         <label>Nama Barang:</label>
@@ -51,17 +49,17 @@
             <option value="0">Cup Datar 16 oz (0g)</option>
             <option value="0">Cup Oval 14 oz (0g)</option>
             <option value="0">Cup Oval 16 oz (0g)</option>
-            <option value="60">Denali Sirup Butterscotch (57g)</option>
-            <option value="60">Denali Sirup Hazelnut (57g)</option>
-            <option value="60">Denali Sirup Leci (57g)</option>
-            <option value="60">Denali Sirup Peach (57g)</option>
-            <option value="60">Denali Sirup Strawberry (57g)</option>
-            <option value="60">Denali Sirup Vanilla (57g)</option>
+            <option value="60">Denali Sirup Butterscotch (60g)</option>
+            <option value="60">Denali Sirup Hazelnut (60g)</option>
+            <option value="60">Denali Sirup Leci (60g)</option>
+            <option value="60">Denali Sirup Peach (60g)</option>
+            <option value="60">Denali Sirup Strawberry (60g)</option>
+            <option value="60">Denali Sirup Vanilla (60g)</option>
             <option value="0">Espresso (0g)</option>
             <option value="11">Fanta 250ml (11g)</option>
             <option value="23">Fanta 390ml (23g)</option>
             <option value="38">Fanta 1 Liter (38g)</option>
-            <option value="124">Gula Pasir (125g)</option>
+            <option value="124">Gula Pasir (124g)</option>
             <option value="0">Half n Half (0g)</option>
             <option value="0">Hydro Coco (0g)</option>
             <option value="0">Indomie Aceh (0g)</option>
@@ -104,25 +102,29 @@
 
     <div class="form-group">
         <label>Berat Timbangan (gram):</label>
-        <input type="number" id="beratInput" placeholder="Masukkan angka..." inputmode="decimal">
+        <input type="number" id="beratInput" placeholder="Masukkan angka..." step="0.01">
+        
+        <div class="fraction-btns">
+            <button class="btn-frac" onclick="setFrac(0.25)">¼ (0.25)</button>
+            <button class="btn-frac" onclick="setFrac(0.5)">½ (0.5)</button>
+            <button class="btn-frac" onclick="setFrac(0.75)">¾ (0.75)</button>
+        </div>
     </div>
 
     <button class="btn-utama" onclick="prosesData()">HITUNG & SIMPAN</button>
-    <div id="notif">✓ Tersimpan ke laporan!</div>
+    <div id="notif">✓ Tersimpan!</div>
 
     <div class="laporan-section">
-        <h3>📋 Hasil Rekapan Stok</h3>
         <table id="tabelLaporan">
             <thead>
                 <tr>
-                    <th>Nama Barang</th>
-                    <th>Stok Riil (g)</th>
+                    <th>Barang</th>
+                    <th>Stok (g)</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
-
         <div class="action-btns">
             <button class="btn-download" onclick="downloadCSV()">⬇️ DOWNLOAD CSV</button>
             <button class="btn-reset" onclick="resetLaporan()">❌ RESET</button>
@@ -131,44 +133,37 @@
 </div>
 
 <script>
+    // Fungsi untuk mengisi pecahan otomatis
+    function setFrac(val) {
+        document.getElementById('beratInput').value = val;
+    }
+
     function prosesData() {
         const select = document.getElementById('produk');
         const beratInput = document.getElementById('beratInput');
-        const notif = document.getElementById('notif');
         
-        // 1. Validasi
-        if(select.value === "0" && select.selectedIndex === 0) {
-            alert("Pilih barang dulu!"); return;
-        }
-        if (isNaN(parseFloat(beratInput.value))) {
-            alert("Masukkan angka berat!"); return;
-        }
+        if(select.value === "0" && select.selectedIndex === 0) { alert("Pilih barang!"); return; }
+        if (beratInput.value === "") { alert("Isi berat atau pilih pecahan!"); return; }
 
-        // 2. Kalkulasi
         const namaProduk = select.options[select.selectedIndex].text.split(' (')[0];
         const wadah = parseFloat(select.value);
         const total = parseFloat(beratInput.value);
         let hasil = total - wadah;
         if (hasil < 0) hasil = 0;
 
-        // 3. Masukkan ke Tabel secara otomatis
         const tbody = document.querySelector('#tabelLaporan tbody');
-        const row = tbody.insertRow(0); // Tambah di baris paling atas
-        row.innerHTML = `<td>${namaProduk}</td><td><b>${hasil}</b></td><td><button class="btn-hapus" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>`;
+        const row = tbody.insertRow(0);
+        row.innerHTML = `<td>${namaProduk}</td><td><b>${hasil.toFixed(2)}</b></td><td><button style="background:#ff5e57;color:white;border:none;padding:5px;border-radius:5px;" onclick="this.parentElement.parentElement.remove()">Hapus</button></td>`;
         
-        // 4. Reset input & tampilkan feedback
         beratInput.value = "";
+        const notif = document.getElementById('notif');
         notif.style.display = "block";
         setTimeout(() => { notif.style.display = "none"; }, 1500);
-        
-        // Focus kembali ke pilih barang (Opsional)
-        select.focus();
     }
 
     function downloadCSV() {
         let csv = 'Nama Barang,Stok Riil (gram)\n';
         const rows = document.querySelectorAll('#tabelLaporan tbody tr');
-        if(rows.length === 0) { alert("Data kosong!"); return; }
         rows.forEach(row => {
             const cols = row.querySelectorAll('td');
             csv += `${cols[0].innerText},${cols[1].innerText}\n`;
@@ -177,17 +172,14 @@
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'stok_cafe_hari_ini.csv';
+        a.download = 'stok_cafe.csv';
         a.click();
     }
 
     function resetLaporan() {
-        if(confirm("Hapus semua rekapan?")) {
-            document.querySelector('#tabelLaporan tbody').innerHTML = "";
-        }
+        if(confirm("Reset semua?")) document.querySelector('#tabelLaporan tbody').innerHTML = "";
     }
 </script>
 
 </body>
 </html>
-
